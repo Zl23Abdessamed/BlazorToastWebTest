@@ -21,11 +21,20 @@ jobs:
         dotnet-version: '9.0.x'
 
     - name: Publish Blazor app
-      run: dotnet publish -c Release -o release
+      run: dotnet publish BlazorToastWebTest.csproj -c Release -o release
+
+    - name: Update base href
+      run: sed -i 's|<base href="/" />|<base href="/BlazorToastWebTest/" />|' release/wwwroot/index.html
+
+    - name: Copy index.html to 404.html
+      run: cp release/wwwroot/index.html release/wwwroot/404.html
+
+    - name: Create .nojekyll to disable Jekyll processing
+      run: touch release/wwwroot/.nojekyll
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./release/wwwroot/BlazorToastWebTest
+        publish_dir: release/wwwroot
         publish_branch: gh-pages

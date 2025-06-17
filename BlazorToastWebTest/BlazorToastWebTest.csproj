@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
@@ -9,6 +9,8 @@
 		<StaticWebAssetBasePath>BlazorToastWebTest</StaticWebAssetBasePath>
 		<PublishTrimmed>false</PublishTrimmed>
 		<PublishReadyToRun>false</PublishReadyToRun>
+		<BasePath>/BlazorToastWebTest/</BasePath>
+		<BlazorCacheBootResources>false</BlazorCacheBootResources>
 	</PropertyGroup>
 
 	<ItemGroup>
