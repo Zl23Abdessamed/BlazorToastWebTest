@@ -1,0 +1,727 @@
+﻿@page "/"
+@using BlazorToast.Models
+@using BlazorToast.Services
+@inject BlazorToastService ToastService
+
+
+<PageTitle>Toast Library Test Page</PageTitle>
+
+<div class="home-page-container">
+    <!-- Background particles for visual effect -->
+    <div class="particles-container">
+        @for (int i = 0; i < 20; i++)
+        {
+            <div class="particle" style="left: @(Random.Shared.Next(0, 100))%; animation-delay: @(Random.Shared.Next(0, 12))s; animation-duration: @(Random.Shared.Next(8, 16))s;"></div>
+        }
+    </div>
+
+    <!-- Main content container -->
+    <div class="main-content-container">
+        <!-- Header Section -->
+        <div class="page-header">
+            <h1 class="page-title">Zl-Blazor-Toast</h1>
+            <p class="page-subtitle">Advanced Toast Notification Library</p>
+        </div>
+
+        <!-- Introduction Section -->
+        <div class="feature-section introduction-section">
+            <div class="section-header">
+                <h3 class="section-title">A Modern Toast Notification Library for Blazor</h3>
+            </div>
+            <p class="introduction-text">
+                ZlBlazorToast is a versatile and highly configurable toast notification library designed for Blazor. It provides developers with a powerful toolset to display elegant, interactive, and accessible notifications that integrate seamlessly into any web application.
+            </p>
+
+            <div class="key-features-grid">
+                <!-- Feature Card 1: Customization -->
+                <div class="feature-card">
+                    <div class="feature-card-icon icon-purple">🎨</div>
+                    <h4 class="feature-card-title">Total Customization</h4>
+                    <p class="feature-card-text">Tailor every aspect of your notifications. Choose from multiple screen positions, light/dark themes, and a rich library of engaging animations to perfectly match your application's look and feel.</p>
+                </div>
+
+                <!-- Feature Card 2: Interactivity -->
+                <div class="feature-card">
+                    <div class="feature-card-icon icon-blue">🎮</div>
+                    <h4 class="feature-card-title">Rich Interactivity</h4>
+                    <p class="feature-card-text">Go beyond static messages. Embed action buttons, display progress bars, add custom sounds, and even pause toasts on hover, giving users full control.</p>
+                </div>
+
+                <!-- Feature Card 3: State Management -->
+                <div class="feature-card">
+                    <div class="feature-card-icon icon-teal">⏳</div>
+                    <h4 class="feature-card-title">Advanced State Management</h4>
+                    <p class="feature-card-text">Effortlessly handle asynchronous operations. Use the dedicated `LoadingToast` or leverage the built-in `PromiseToast` API to automatically manage loading, success, and error states.</p>
+                </div>
+
+                <!-- Feature Card 4: Orchestration -->
+                <div class="feature-card">
+                    <div class="feature-card-icon icon-orange">📦</div>
+                    <h4 class="feature-card-title">Smart Toast Orchestration</h4>
+                    <p class="feature-card-text">Prevent notification clutter with powerful management tools. Group related toasts, limit the number visible at once, and dismiss them individually, by group, or all at once.</p>
+                </div>
+
+                <!-- Feature Card 5: Developer API -->
+                <div class="feature-card">
+                    <div class="feature-card-icon icon-indigo">💻</div>
+                    <h4 class="feature-card-title">Developer-First API</h4>
+                    <p class="feature-card-text">Designed for a seamless developer experience. A fluent, chainable API makes creating complex toasts effortless. Configure global defaults and override them on a per-toast basis.</p>
+                </div>
+
+                <!-- Feature Card 6: Accessibility -->
+                <div class="feature-card">
+                    <div class="feature-card-icon icon-pink">👁️‍🗨️</div>
+                    <h4 class="feature-card-title">Accessibility Built-in</h4>
+                    <p class="feature-card-text">Ensure your application is inclusive. With built-in ARIA attributes and a screen-reader-friendly design, your notifications are immediately compatible with assistive technologies.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Basic Toast Types Section -->
+        <div class="feature-section">
+            <div class="section-header">
+                <h3 class="section-title">Basic Toast Types</h3>
+            </div>
+            <div class="button-grid">
+                <button class="toast-button toast-button-success" @onclick="ShowSuccessToast">
+                    <span class="button-icon">✓</span>
+                    <span class="button-text">Success Toast</span>
+                </button>
+                <button class="toast-button toast-button-error" @onclick="ShowErrorToast">
+                    <span class="button-icon">✗</span>
+                    <span class="button-text">Error Toast</span>
+                </button>
+                <button class="toast-button toast-button-warning" @onclick="ShowWarningToast">
+                    <span class="button-icon">⚠</span>
+                    <span class="button-text">Warning Toast</span>
+                </button>
+                <button class="toast-button toast-button-info" @onclick="ShowInfoToast">
+                    <span class="button-icon">ℹ</span>
+                    <span class="button-text">Info Toast</span>
+                </button>
+                <button class="toast-button toast-button-loading" @onclick="ShowLoadingToast">
+                    <span class="button-icon">⟳</span>
+                    <span class="button-text">Loading Toast</span>
+                </button>
+                <button class="toast-button toast-button-custom" @onclick="ShowCustomToast">
+                    <span class="button-icon">⚡</span>
+                    <span class="button-text">Custom Toast</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Position Tests Section -->
+        <div class="feature-section">
+            <div class="section-header">
+                <h3 class="section-title">Position Tests</h3>
+            </div>
+            <div class="button-grid">
+                <button class="toast-button toast-button-position" @onclick="() => ShowPositionToast(ToastPosition.TopLeft)">
+                    <span class="button-icon">↖</span>
+                    <span class="button-text">Top Left</span>
+                </button>
+                <button class="toast-button toast-button-position" @onclick="() => ShowPositionToast(ToastPosition.TopCenter)">
+                    <span class="button-icon">↑</span>
+                    <span class="button-text">Top Center</span>
+                </button>
+                <button class="toast-button toast-button-position" @onclick="() => ShowPositionToast(ToastPosition.TopRight)">
+                    <span class="button-icon">↗</span>
+                    <span class="button-text">Top Right</span>
+                </button>
+                <button class="toast-button toast-button-position" @onclick="() => ShowPositionToast(ToastPosition.BottomLeft)">
+                    <span class="button-icon">↙</span>
+                    <span class="button-text">Bottom Left</span>
+                </button>
+                <button class="toast-button toast-button-position" @onclick="() => ShowPositionToast(ToastPosition.BottomCenter)">
+                    <span class="button-icon">↓</span>
+                    <span class="button-text">Bottom Center</span>
+                </button>
+                <button class="toast-button toast-button-position" @onclick="() => ShowPositionToast(ToastPosition.BottomRight)">
+                    <span class="button-icon">↘</span>
+                    <span class="button-text">Bottom Right</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Advanced Features Section -->
+        <div class="feature-section">
+            <div class="section-header">
+                <h3 class="section-title">Advanced Features</h3>
+            </div>
+            <div class="button-grid button-grid-wide">
+                <button class="toast-button toast-button-advanced" @onclick="ShowToastWithActions">
+                    <span class="button-icon">⚙</span>
+                    <span class="button-text">Toast with Actions</span>
+                </button>
+                <button class="toast-button toast-button-advanced" @onclick="ShowToastWithProgress">
+                    <span class="button-icon">📊</span>
+                    <span class="button-text">Toast with Progress</span>
+                </button>
+                <button class="toast-button toast-button-advanced" @onclick="ShowPersistentToast">
+                    <span class="button-icon">📌</span>
+                    <span class="button-text">Persistent Toast</span>
+                </button>
+                <button class="toast-button toast-button-advanced" @onclick="ShowToastWithCustomIcon">
+                    <span class="button-icon">🎨</span>
+                    <span class="button-text">Custom Icon Toast</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Toast Controls Section -->
+        <div class="feature-section">
+            <div class="section-header">
+                <h3 class="section-title">Loading Toast Controls</h3>
+            </div>
+            <div class="button-grid">
+                <button class="toast-button toast-button-control" @onclick="StartControllableLoading">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Start Loading</span>
+                </button>
+                <button class="toast-button toast-button-control" @onclick="UpdateLoadingMessage" disabled="@(currentLoadingToast == null)">
+                    <span class="button-icon">📝</span>
+                    <span class="button-text">Update Message</span>
+                </button>
+                <button class="toast-button toast-button-control" @onclick="UpdateLoadingProgress" disabled="@(currentLoadingToast == null)">
+                    <span class="button-icon">📈</span>
+                    <span class="button-text">Update Progress</span>
+                </button>
+                <button class="toast-button toast-button-control toast-button-success" @onclick="CompleteLoadingSuccess" disabled="@(currentLoadingToast == null)">
+                    <span class="button-icon">✓</span>
+                    <span class="button-text">Complete Success</span>
+                </button>
+                <button class="toast-button toast-button-control toast-button-error" @onclick="CompleteLoadingError" disabled="@(currentLoadingToast == null)">
+                    <span class="button-icon">✗</span>
+                    <span class="button-text">Complete Error</span>
+                </button>
+                <button class="toast-button toast-button-control toast-button-warning" @onclick="CompleteLoadingWarning" disabled="@(currentLoadingToast == null)">
+                    <span class="button-icon">⚠</span>
+                    <span class="button-text">Complete Warning</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Promise Toast Section -->
+        <div class="feature-section">
+            <div class="section-header">
+                <h3 class="section-title">Promise Toast</h3>
+            </div>
+            <div class="button-grid button-grid-wide">
+                <button class="toast-button toast-button-promise toast-button-success" @onclick="ShowPromiseToastSuccess">
+                    <span class="button-icon">✓</span>
+                    <span class="button-text">Promise Success</span>
+                </button>
+                <button class="toast-button toast-button-promise toast-button-error" @onclick="ShowPromiseToastError">
+                    <span class="button-icon">✗</span>
+                    <span class="button-text">Promise Error</span>
+                </button>
+                <button class="toast-button toast-button-promise toast-button-info" @onclick="ShowPromiseToastWithResult">
+                    <span class="button-icon">📋</span>
+                    <span class="button-text">Promise with Result</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Group Operations Section -->
+        <div class="feature-section">
+            <div class="section-header">
+                <h3 class="section-title">Group Operations</h3>
+            </div>
+            <div class="button-grid button-grid-wide">
+                <button class="toast-button toast-button-group" @onclick="ShowGroupedToasts">
+                    <span class="button-icon">📦</span>
+                    <span class="button-text">Show Group A</span>
+                </button>
+                <button class="toast-button toast-button-group" @onclick="ShowGroupedToastsB">
+                    <span class="button-icon">📦</span>
+                    <span class="button-text">Show Group B</span>
+                </button>
+                <button class="toast-button toast-button-group toast-button-warning" @onclick='() => ToastService.DismissGroup("group-a")'>
+                    <span class="button-icon">🗑</span>
+                    <span class="button-text">Dismiss Group A</span>
+                </button>
+                <button class="toast-button toast-button-group toast-button-error" @onclick="ShowReplaceGroupToast">
+                    <span class="button-icon">🔄</span>
+                    <span class="button-text">Replace Group A</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Batch Operations Section -->
+        <div class="feature-section">
+            <div class="section-header">
+                <h3 class="section-title">Batch & Bulk Operations</h3>
+            </div>
+            <div class="button-grid button-grid-wide">
+                <button class="toast-button toast-button-batch" @onclick="ShowBatchToasts">
+                    <span class="button-icon">📚</span>
+                    <span class="button-text">Show Batch</span>
+                </button>
+                <button class="toast-button toast-button-batch toast-button-warning" @onclick="() => ToastService.DismissAll(ToastType.Success)">
+                    <span class="button-icon">🗑</span>
+                    <span class="button-text">Dismiss Success</span>
+                </button>
+                <button class="toast-button toast-button-batch toast-button-error" @onclick="() => ToastService.DismissAll()">
+                    <span class="button-icon">🗑</span>
+                    <span class="button-text">Dismiss All</span>
+                </button>
+                <button class="toast-button toast-button-batch toast-button-dark" @onclick="() => ToastService.ClearAll()">
+                    <span class="button-icon">🧹</span>
+                    <span class="button-text">Clear All</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Configuration Section -->
+        <div class="feature-section">
+            <div class="section-header">
+                <h3 class="section-title">Configuration</h3>
+            </div>
+            <div class="button-grid button-grid-wide">
+                <button class="toast-button toast-button-config" @onclick="ConfigureToastService">
+                    <span class="button-icon">⚙</span>
+                    <span class="button-text">Configure Service</span>
+                </button>
+                <button class="toast-button toast-button-config" @onclick="ShowConfiguredToast">
+                    <span class="button-icon">🔧</span>
+                    <span class="button-text">Show Configured Toast</span>
+                </button>
+                <button class="toast-button toast-button-config" @onclick="ShowToastInfo">
+                    <span class="button-icon">ℹ</span>
+                    <span class="button-text">Show Toast Info</span>
+                </button>
+                <button class="toast-button toast-button-config" @onclick="ShowMultipleToasts">
+                    <span class="button-icon">📊</span>
+                    <span class="button-text">Show Multiple (Test Queue)</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Toast Statistics Section -->
+        <div class="feature-section">
+            <div class="section-header">
+                <h3 class="section-title">Toast Statistics</h3>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card stat-card-info">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Active Toasts</div>
+                        <div class="stat-value">@ToastService.ActiveToasts.Count</div>
+                    </div>
+                </div>
+                <div class="stat-card stat-card-success">
+                    <div class="stat-icon">✓</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Success Toasts</div>
+                        <div class="stat-value">@ToastService.GetToastCount(ToastType.Success)</div>
+                    </div>
+                </div>
+                <div class="stat-card stat-card-error">
+                    <div class="stat-icon">✗</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Error Toasts</div>
+                        <div class="stat-value">@ToastService.GetToastCount(ToastType.Error)</div>
+                    </div>
+                </div>
+                <div class="stat-card stat-card-warning">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Group A Toasts</div>
+                        <div class="stat-value">@ToastService.GetToastsByGroup("group-a").Count()</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Special Test Features -->
+        <div class="feature-section">
+            <div class="section-header">
+                <h3 class="section-title">Special Features</h3>
+            </div>
+            <div class="button-grid button-grid-wide">
+                <button class="toast-button toast-button-special" @onclick="ShowTestToastWithSound">
+                    <span class="button-icon">🔊</span>
+                    <span class="button-text">Test Toast with Sound</span>
+                </button>
+                <button class="toast-button toast-button-special" @onclick="ShowDelayedToast">
+                    <span class="button-icon">⏱</span>
+                    <span class="button-text">Test Delayed Toast</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private LoadingToast? currentLoadingToast;
+    private double currentProgress = 0;
+
+    // Basic toast methods
+    private async Task ShowSuccessToast()
+    {
+        RenderFragment customIcon = @<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <path d="M200,30
+                                         Q350,150 300,300
+                                         T100,350
+                                         Q50,250 100,150
+                                         T200,30"
+                  fill="none" stroke="purple" stroke-width="6" stroke-linecap="round" />
+            <circle cx="200" cy="200" r="60" fill="yellow" opacity="0.8" />
+            <polygon points="150,250 250,250 200,350" fill="cyan" />
+            <rect x="170" y="170" width="60" height="60" fill="red" transform="rotate(45, 200, 200)" />
+        </svg>
+        ;
+        System.Console.WriteLine("Showing success toast");
+        ToastMessage customsuccess = ToastMessage.Success("Product successfully deleted")
+            .WithDuration(10000) // Give user time to click
+            .WithActions(
+                new ToastAction
+                {
+                    Label = "Undo",
+                    IsPrimary = true, // Make it stand out
+                    Action = async () =>
+                    {
+                        // This is the code that runs when "Undo" is clicked
+                        Console.WriteLine("UNDO ACTION TRIGGERED!");
+                        // You would put your logic to restore the product here.
+                        // We can even show another toast to confirm the undo.
+                        await ToastService.ShowInfo("The product has been restored.");
+                    },
+                    CssClass = "yoo",
+                }
+            );
+        await ToastService.ShowToast(customsuccess);
+    }
+
+    private async Task ShowErrorToast()
+    {
+        await ToastService.ShowError("An error occurred while processing your request.", 10000);
+    }
+
+    private async Task ShowWarningToast()
+    {
+        await ToastService.ShowWarning("This is a warning message.");
+    }
+
+    private async Task ShowInfoToast()
+    {
+        await ToastService.ShowInfo("Here's some information for you.");
+    }
+
+    private async Task ShowLoadingToast()
+    {
+        var loadingToast = await ToastService.ShowLoading("Processing your request...");
+
+        // Auto-complete after 3 seconds
+        await Task.Delay(3000);
+        await loadingToast.Success("Processing completed!");
+    }
+
+    private async Task ShowCustomToast()
+    {
+        // Replace the old customContent with this new one
+        RenderFragment customContent = @<div class="custom-toast-wrapper">
+            <div class="custom-toast-main-area">
+                <div class="custom-toast-icon">✨</div>
+                <div class="custom-toast-text-area">
+                    <h5 class="custom-toast-title">Fully Custom Content</h5>
+                    <p class="custom-toast-description">
+                        Render any Blazor component or HTML markup directly inside a toast.
+                    </p>
+                </div>
+            </div>
+            <button class="custom-toast-button">Take Action</button>
+        </div>;
+
+
+        await ToastService.ShowCustom(customContent, 6000, ToastPosition.TopCenter);
+    }
+
+    // Position tests
+    private async Task ShowPositionToast(ToastPosition position)
+    {
+        var toast = ToastMessage.Info($"Toast at {position}");
+        toast.Position = position;
+        await ToastService.ShowToast(toast);
+    }
+
+    // Advanced features
+    private async Task ShowToastWithActions()
+    {
+        var toast = ToastMessage.Success("Would you like to perform an action?");
+        toast.Duration = 0; // Persistent until action is taken
+
+        toast.Actions.Add(new ToastAction
+        {
+            Label = "Yes",
+            IsPrimary = true,
+            CloseToastAfterAction = true,
+            Action = async () =>
+            {
+                await ToastService.ShowSuccess("You clicked Yes!");
+            }
+        });
+
+        toast.Actions.Add(new ToastAction
+        {
+            Label = "No",
+            IsPrimary = false,
+            CloseToastAfterAction = true,
+            Action = async () =>
+            {
+                await ToastService.ShowInfo("You clicked No!");
+            }
+        });
+
+        await ToastService.ShowToast(toast);
+    }
+
+    private async Task ShowToastWithProgress()
+    {
+        var toast = ToastMessage.Info("File upload in progress...");
+        toast.Progress.Show = true;
+        toast.Progress.Value = 0.9;
+        toast.Progress.Animated = true;
+        toast.Progress.Color = "#007bff"; // Bootstrap primary color
+        toast.Duration = 8000;
+
+        await ToastService.ShowToast(toast);
+    }
+
+    private async Task ShowPersistentToast()
+    {
+        var toast = ToastMessage.Warning("This toast will stay until you close it!");
+        toast.IsPersistent = true;
+        toast.Duration = 0;
+        toast.ShowCloseButton = true;
+
+        await ToastService.ShowToast(toast);
+    }
+
+    private async Task ShowToastWithCustomIcon()
+    {
+        var toast = ToastMessage.Info("Custom icon toast");
+        toast.CustomIcon = @<span style="font-size: 20px;">🚀</span>;
+
+        await ToastService.ShowToast(toast);
+    }
+
+    // Loading toast controls
+    private async Task StartControllableLoading()
+    {
+        currentLoadingToast?.Dispose();
+        currentLoadingToast = await ToastService.ShowLoadingToast("Starting process...");
+        currentProgress = 0;
+        StateHasChanged();
+    }
+
+    private async Task UpdateLoadingMessage()
+    {
+        if (currentLoadingToast != null)
+        {
+            await currentLoadingToast.UpdateMessage("Processing step 2...");
+        }
+    }
+
+    private async Task UpdateLoadingProgress()
+    {
+        if (currentLoadingToast != null)
+        {
+            currentProgress += 0.2;
+            if (currentProgress > 1) currentProgress = 0;
+            await currentLoadingToast.UpdateProgress(currentProgress);
+        }
+    }
+
+    private async Task CompleteLoadingSuccess()
+    {
+        if (currentLoadingToast != null)
+        {
+            await currentLoadingToast.Success("Process completed successfully!");
+            currentLoadingToast = null;
+            StateHasChanged();
+        }
+    }
+
+    private async Task CompleteLoadingError()
+    {
+        if (currentLoadingToast != null)
+        {
+            await currentLoadingToast.Error("Process failed with error!");
+            currentLoadingToast = null;
+            StateHasChanged();
+        }
+    }
+
+    private async Task CompleteLoadingWarning()
+    {
+        if (currentLoadingToast != null)
+        {
+            await currentLoadingToast.Warning("Process completed with warnings!");
+            currentLoadingToast = null;
+            StateHasChanged();
+        }
+    }
+
+    // Promise toast methods
+    private async Task ShowPromiseToastSuccess()
+    {
+        var mockTask = Task.Delay(2000);
+        await ToastService.ShowPromiseToast(
+            mockTask,
+            () => "Processing request...",
+            () => "Request completed successfully!",
+            ex => "Request failed!"
+        );
+    }
+
+    private async Task ShowPromiseToastError()
+    {
+        var mockTask = Task.Delay(2000).ContinueWith(t => throw new Exception("Mock error"));
+
+        try
+        {
+            await ToastService.ShowPromiseToast(
+                mockTask,
+                () =>
+                {
+                    Console.WriteLine("Processing request...");
+                    return "Processing request...";
+                },
+                () => "Request completed successfully!",
+                ex => $"Request failed: {ex.Message}"
+            );
+        }
+        catch
+        {
+            // Expected to throw
+        }
+    }
+
+    private async Task ShowPromiseToastWithResult()
+    {
+        var mockTask = Task.Delay(2000).ContinueWith(t => "Result: Success");
+
+        var result = await ToastService.ShowPromiseToast(
+            mockTask,
+            () => "Fetching data...",
+            result => $"Data fetched successfully: {result}!",
+            ex => $"Failed to fetch data: {ex.Message}"
+        );
+
+        await ToastService.ShowInfo($"Received: {result}");
+    }
+
+    // Group operations
+    private async Task ShowGroupedToasts()
+    {
+        for (int i = 1; i <= 3; i++)
+        {
+            var toast = ToastMessage.Info($"Group A Toast #{i}");
+            toast.GroupId = "group-a";
+            await ToastService.ShowToast(toast);
+        }
+    }
+
+    private async Task ShowGroupedToastsB()
+    {
+        for (int i = 1; i <= 3; i++)
+        {
+            var toast = ToastMessage.Success($"Group B Toast #{i}");
+            toast.GroupId = "group-b";
+            await ToastService.ShowToast(toast);
+        }
+    }
+
+    private async Task ShowReplaceGroupToast()
+    {
+        var toast = ToastMessage.Warning("This replaces all Group A toasts!");
+        toast.GroupId = "group-a";
+        toast.ReplaceGroup = true;
+        await ToastService.ShowToast(toast);
+    }
+
+    // Batch operations
+    private async Task ShowBatchToasts()
+    {
+        var toasts = new[]
+        {
+            ToastMessage.Success("Batch toast 1"),
+            ToastMessage.Info("Batch toast 2"),
+            ToastMessage.Warning("Batch toast 3")
+        };
+
+        await ToastService.ShowBatch(toasts);
+    }
+
+    // Configuration
+    private void ConfigureToastService()
+    {
+        ToastService.Configure(config =>
+        {
+            config.DefaultDuration = 8000;
+            config.DefaultPosition = ToastPosition.TopCenter;
+            config.MaxVisibleToasts = 5;
+            config.CloseOnClick = true;
+            config.PauseOnHover = true;
+            config.ShowCloseButton = true;
+        });
+
+        ToastService.ShowSuccess("Toast service configured!");
+    }
+
+    private async Task ShowConfiguredToast()
+    {
+        // This will use the configured defaults
+        await ToastService.ShowInfo("This toast uses configured defaults!");
+    }
+
+    private async Task ShowToastInfo()
+    {
+        var activeCount = ToastService.ActiveToasts.Count;
+        var visibleCount = ToastService.VisibleToasts.Count;
+
+        await ToastService.ShowInfo($"Active: {activeCount}, Visible: {visibleCount}");
+    }
+
+    private async Task ShowMultipleToasts()
+    {
+        // Show more toasts than the max visible to test queueing
+        for (int i = 1; i <= 10; i++)
+        {
+            var toast = ToastMessage.Info($"Toast #{i}");
+            await ToastService.ShowToast(toast);
+        }
+    }
+
+    private async Task ShowTestToastWithSound()
+    {
+        await ToastService.ShowToast(
+            Toast.Success("This toast has sound!")
+                 .WithSound("/sounds/NotificationSound.mp3") // Put your sound file here
+                 .WithPosition(ToastPosition.BottomRight).WithDuration(100000)
+        );
+    }
+
+    private async Task ShowDelayedToast()
+    {
+        await ToastService.ShowToast(
+            Toast.Info("This toast was delayed by 3 seconds")
+                 .WithDelay(3000)
+                 .WithPosition(ToastPosition.BottomRight).WithTheme(ToastTheme.Light)
+    );
+    }
+
+    protected override void OnInitialized()
+    {
+        // Subscribe to toast changes to update statistics
+        ToastService.OnToastsChanged += () => InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        currentLoadingToast?.Dispose();
+        ToastService.OnToastsChanged -= () => InvokeAsync(StateHasChanged);
+    }
+}

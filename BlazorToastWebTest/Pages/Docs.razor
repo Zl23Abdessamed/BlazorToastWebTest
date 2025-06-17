@@ -1,0 +1,764 @@
+﻿@page "/docs"
+@using BlazorToast.Models
+@using BlazorToast.Services
+@inject BlazorToastService ToastService
+
+<PageTitle>Documentation & Examples</PageTitle>
+
+<div class="docs-container">
+    <div class="docs-header">
+        <h1 class="docs-title">Documentation & Examples</h1>
+        <p class="docs-subtitle">Explore all features of Zl-Blazor-Toast with interactive examples and code snippets.</p>
+    </div>
+
+    <!-- Section: Basic Usage -->
+    <div class="docs-section">
+        <h2 class="section-title">Basic Usage</h2>
+        <p class="section-description">
+            Create toasts of different types: Success, Error, Warning, Info, Loading, and Custom.
+        </p>
+        <div class="example-block">
+            <div class="button-group">
+                @foreach (var type in Enum.GetValues<ToastType>())
+                {
+                    <button class="@(type == _selectedType ? "active" : "")" @onclick="() => SelectType(type)">
+                        @type.ToString()
+                    </button>
+                }
+            </div>
+            <div class="code-style-toggle">
+                <button @onclick="ToggleTypeCodeStyle">Switch to @_typeCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_typeCodeSnippets[_selectedType])</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowTypeExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Toast</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Positioning -->
+    <div class="docs-section">
+        <h2 class="section-title">Positioning</h2>
+        <p class="section-description">
+            Display toasts in any corner or centered on the screen.
+        </p>
+        <div class="example-block">
+            <div class="button-group">
+                @foreach (var pos in Enum.GetValues<ToastPosition>())
+                {
+                    <button class="@(pos == _selectedPosition ? "active" : "")" @onclick="() => SelectPosition(pos)">
+                        @pos.ToString()
+                    </button>
+                }
+            </div>
+            <div class="code-style-toggle">
+                <button @onclick="TogglePositionCodeStyle">Switch to @_positionCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_positionCodeSnippets[_selectedPosition])</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowPositionExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Toast</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Theming -->
+    <div class="docs-section">
+        <h2 class="section-title">Theming</h2>
+        <p class="section-description">
+            Choose from built-in themes: System, Light, Dark, Auto.
+        </p>
+        <div class="example-block">
+            <div class="button-group">
+                @foreach (var theme in Enum.GetValues<ToastTheme>())
+                {
+                    <button class="@(theme == _selectedTheme ? "active" : "")" @onclick="() => SelectTheme(theme)">
+                        @theme.ToString()
+                    </button>
+                }
+            </div>
+            <div class="code-style-toggle">
+                <button @onclick="ToggleThemeCodeStyle">Switch to @_themeCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_themeCodeSnippets[_selectedTheme])</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowThemeExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Toast</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Animations -->
+    <div class="docs-section">
+        <h2 class="section-title">Animations</h2>
+        <p class="section-description">
+            Add enter and exit animations like Fade, Slide, Bounce, etc.
+        </p>
+        <div class="example-block">
+            <div class="button-group">
+                @foreach (var anim in _animations)
+                {
+                    <button class="@(anim.Item1 == _selectedAnimation.Name ? "active" : "")" @onclick="() => SelectAnimation(anim)">
+                        @anim.Item1
+                    </button>
+                }
+            </div>
+            <div class="code-style-toggle">
+                <button @onclick="ToggleAnimationCodeStyle">Switch to @_animationCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_animationCodeSnippets[_selectedAnimation.Name])</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowAnimationExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Toast</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Custom Content -->
+    <div class="docs-section">
+        <h2 class="section-title">Custom Content</h2>
+        <p class="section-description">
+            Use <code>RenderFragment</code> for complex toast content.
+        </p>
+        <div class="example-block">
+            <div class="code-style-toggle">
+                <button @onclick="ToggleCustomContentCodeStyle">Switch to @_customContentCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_customContentCodeSnippet)</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowCustomContentExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Custom Toast</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Actions -->
+    <div class="docs-section">
+        <h2 class="section-title">Actions</h2>
+        <p class="section-description">
+            Add interactive buttons to toasts.
+        </p>
+        <div class="example-block">
+            <div class="code-style-toggle">
+                <button @onclick="ToggleActionsCodeStyle">Switch to @_actionsCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_actionsCodeSnippet)</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowActionsExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Toast with Actions</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Progress Bars -->
+    <div class="docs-section">
+        <h2 class="section-title">Progress Bars</h2>
+        <p class="section-description">
+            Display progress bars in toasts.
+        </p>
+        <div class="example-block">
+            <div class="code-style-toggle">
+                <button @onclick="ToggleProgressCodeStyle">Switch to @_progressCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_progressCodeSnippet)</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowProgressExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Toast with Progress</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Grouping and Priority -->
+    <div class="docs-section">
+        <h2 class="section-title">Grouping and Priority</h2>
+        <p class="section-description">
+            Group toasts and set display priorities.
+        </p>
+        <div class="example-block">
+            <div class="code-style-toggle">
+                <button @onclick="ToggleGroupingCodeStyle">Switch to @_groupingCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_groupingCodeSnippet)</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowGroupingExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Grouped Toasts</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Accessibility -->
+    <div class="docs-section">
+        <h2 class="section-title">Accessibility</h2>
+        <p class="section-description">
+            Enhance toasts with ARIA attributes for accessibility.
+        </p>
+        <div class="example-block">
+            <div class="code-style-toggle">
+                <button @onclick="ToggleAccessibilityCodeStyle">Switch to @_accessibilityCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_accessibilityCodeSnippet)</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowAccessibilityExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Accessible Toast</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Sounds and Delays -->
+    <div class="docs-section">
+        <h2 class="section-title">Sounds and Delays</h2>
+        <p class="section-description">
+            Add sounds and delay toast appearances.
+        </p>
+        <div class="example-block">
+            <div class="code-style-toggle">
+                <button @onclick="ToggleSoundDelayCodeStyle">Switch to @_soundDelayCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_soundDelayCodeSnippet)</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowSoundDelayExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Toast with Sound and Delay</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Persistent and Loading Toasts -->
+    <div class="docs-section">
+        <h2 class="section-title">Persistent and Loading Toasts</h2>
+        <p class="section-description">
+            Create persistent toasts or manage loading states.
+        </p>
+        <div class="example-block">
+            <div class="code-style-toggle">
+                <button @onclick="TogglePersistentCodeStyle">Switch to @_persistentCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_persistentCodeSnippet)</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowPersistentExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Persistent Toast</span>
+                </button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_loadingCodeSnippet)</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowLoadingExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Loading Toast</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Batch and Promise Operations -->
+    <div class="docs-section">
+        <h2 class="section-title">Batch and Promise Operations</h2>
+        <p class="section-description">
+            Show multiple toasts or handle async operations.
+        </p>
+        <div class="example-block">
+            <div class="code-style-toggle">
+                <button @onclick="ToggleBatchCodeStyle">Switch to @_batchCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_batchCodeSnippet)</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowBatchExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Batch Toasts</span>
+                </button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_promiseCodeSnippet)</code></pre>
+                </div>
+                <div class="button-group promise-buttons">
+                    <button class="show-toast-button" @onclick="ShowPromiseSuccessExample">Simulate Success</button>
+                    <button class="show-toast-button error" @onclick="ShowPromiseErrorExample">Simulate Error</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Hidden Toasts -->
+    <div class="docs-section">
+        <h2 class="section-title">Hidden Toasts</h2>
+        <p class="section-description">
+            Manage hidden toasts when exceeding visible limits.
+        </p>
+        <div class="example-block">
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_hiddenToastsCodeSnippet)</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowHiddenToastsExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Multiple Toasts</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Mouse Interactions -->
+    <div class="docs-section">
+        <h2 class="section-title">Mouse Interactions</h2>
+        <p class="section-description">
+            Handle hover and click events on toasts.
+        </p>
+        <div class="example-block">
+            <div class="code-style-toggle">
+                <button @onclick="ToggleMouseInteractionsCodeStyle">Switch to @_mouseInteractionsCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_mouseInteractionsCodeSnippet)</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowMouseInteractionsExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Interactive Toast</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Custom Icons -->
+    <div class="docs-section">
+        <h2 class="section-title">Custom Icons</h2>
+        <p class="section-description">
+            Use custom icons with strings or <code>RenderFragment</code>.
+        </p>
+        <div class="example-block">
+            <div class="code-style-toggle">
+                <button @onclick="ToggleCustomIconsCodeStyle">Switch to @_customIconsCodeStyle</button>
+            </div>
+            <div class="code-display-wrapper">
+                <div class="code-display">
+                    <pre><code>@((MarkupString)_customIconsCodeSnippet)</code></pre>
+                </div>
+                <button class="show-toast-button" @onclick="ShowCustomIconsExample">
+                    <span class="button-icon">▶</span>
+                    <span class="button-text">Show Toast with Custom Icon</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: API Reference -->
+    <div class="docs-section">
+        <h2 class="section-title">API Reference</h2>
+        <p class="section-description">
+            Key methods and properties of the library.
+        </p>
+        <ul>
+            <li><strong>ShowToast(ToastMessage toast)</strong>: Displays a toast.</li>
+            <li><strong>ShowSuccess(string message, int? duration)</strong>: Success toast.</li>
+            <li><strong>ShowError(string message, int? duration)</strong>: Error toast.</li>
+            <li><strong>ShowWarning(string message, int? duration)</strong>: Warning toast.</li>
+            <li><strong>ShowInfo(string message, int? duration)</strong>: Info toast.</li>
+            <li><strong>ShowLoading(string message)</strong>: Loading toast with control.</li>
+            <li><strong>ShowCustom(RenderFragment content)</strong>: Custom content toast.</li>
+            <li><strong>ShowBatch(params ToastMessage[] toasts)</strong>: Multiple toasts.</li>
+            <li><strong>ShowPromiseToast(Task promise, ...)</strong>: Async operation toast.</li>
+        </ul>
+    </div>
+</div>
+
+@code {
+    // Basic Usage
+    private ToastType _selectedType = ToastType.Info;
+    private string _typeCodeStyle = "Fluent";
+    private Dictionary<ToastType, string> _typeCodeSnippets = new();
+
+    private void SelectType(ToastType type) => _selectedType = type;
+
+    private void ToggleTypeCodeStyle()
+    {
+        _typeCodeStyle = _typeCodeStyle == "Fluent" ? "Builder" : "Fluent";
+        GenerateTypeCodeSnippets(); // Regenerate code on toggle
+    }
+
+    private async Task ShowTypeExample()
+    {
+        switch (_selectedType)
+        {
+            case ToastType.Success: await ToastService.ShowSuccess("Success toast."); break;
+            case ToastType.Error: await ToastService.ShowError("Error toast."); break;
+            case ToastType.Warning: await ToastService.ShowWarning("Warning toast."); break;
+            case ToastType.Info: await ToastService.ShowInfo("Info toast."); break;
+            case ToastType.Loading:
+                var loadingToast = await ToastService.ShowLoading("Loading...");
+                await Task.Delay(2000);
+                await loadingToast.Success("Done!");
+                break;
+            case ToastType.Custom:
+                await ToastService.ShowCustom(builder => builder.AddMarkupContent(0, "<strong>Custom</strong> toast"));
+                break;
+        }
+    }
+
+    // Positioning
+    private ToastPosition _selectedPosition = ToastPosition.TopRight;
+    private string _positionCodeStyle = "Fluent";
+    private Dictionary<ToastPosition, string> _positionCodeSnippets = new();
+
+    private void SelectPosition(ToastPosition pos) => _selectedPosition = pos;
+
+    private void TogglePositionCodeStyle()
+    {
+        _positionCodeStyle = _positionCodeStyle == "Fluent" ? "Builder" : "Fluent";
+        GeneratePositionCodeSnippets(); // Regenerate code on toggle
+    }
+
+    private async Task ShowPositionExample()
+    {
+        var toast = Toast.Info($"Toast at {_selectedPosition}").WithPosition(_selectedPosition);
+        await ToastService.ShowToast(toast);
+    }
+
+    // Theming
+    private ToastTheme _selectedTheme = ToastTheme.System;
+    private string _themeCodeStyle = "Fluent";
+    private Dictionary<ToastTheme, string> _themeCodeSnippets = new();
+
+    private void SelectTheme(ToastTheme theme) => _selectedTheme = theme;
+
+    private void ToggleThemeCodeStyle()
+    {
+        _themeCodeStyle = _themeCodeStyle == "Fluent" ? "Builder" : "Fluent";
+        GenerateThemeCodeSnippets(); // Regenerate code on toggle
+    }
+
+    private async Task ShowThemeExample()
+    {
+        var toast = Toast.Success($"Theme: {_selectedTheme}").WithTheme(_selectedTheme);
+        await ToastService.ShowToast(toast);
+    }
+
+    // Animations
+    private (string Name, ToastAnimation Animation) _selectedAnimation;
+    private string _animationCodeStyle = "Fluent";
+    private List<(string, ToastAnimation)> _animations = new();
+    private Dictionary<string, string> _animationCodeSnippets = new();
+
+    private void SelectAnimation((string, ToastAnimation) anim) => _selectedAnimation = anim;
+
+    private void ToggleAnimationCodeStyle()
+    {
+        _animationCodeStyle = _animationCodeStyle == "Fluent" ? "Builder" : "Fluent";
+        GenerateAnimationCodeSnippets(); // Regenerate code on toggle
+    }
+
+    private async Task ShowAnimationExample()
+    {
+        var toast = Toast.Info($"Animation: {_selectedAnimation.Name}").WithAnimation(_selectedAnimation.Animation);
+        await ToastService.ShowToast(toast);
+    }
+
+    // ... (rest of the example methods remain the same)
+    // Custom Content, Actions, Progress, etc.
+    #region Other Example Methods
+    private string _customContentCodeStyle = "Fluent";
+    private string _customContentCodeSnippet = "";
+    private void ToggleCustomContentCodeStyle() { _customContentCodeStyle = _customContentCodeStyle == "Fluent" ? "Builder" : "Fluent"; GenerateCustomContentCodeSnippet(); }
+    private async Task ShowCustomContentExample()
+    {
+        RenderFragment content = @<div><strong>Custom</strong> <em>content</em></div>;
+        await ToastService.ShowCustom(content);
+    }
+
+    private string _actionsCodeStyle = "Fluent";
+    private string _actionsCodeSnippet = "";
+    private void ToggleActionsCodeStyle() { _actionsCodeStyle = _actionsCodeStyle == "Fluent" ? "Builder" : "Fluent"; GenerateActionsCodeSnippet(); }
+    private async Task ShowActionsExample()
+    {
+        await ToastService.ShowToast(
+            Toast.Warning("Session expiring!")
+                .Persistent()
+                .WithAction("Stay", async () => await ToastService.ShowSuccess("Extended!"), isPrimary: true)
+                .WithAction("Log Out", () => Task.CompletedTask)
+        );
+    }
+
+    private string _progressCodeStyle = "Fluent";
+    private string _progressCodeSnippet = "";
+    private void ToggleProgressCodeStyle() { _progressCodeStyle = _progressCodeStyle == "Fluent" ? "Builder" : "Fluent"; GenerateProgressCodeSnippet(); }
+    private async Task ShowProgressExample()
+    {
+        var toast = Toast.Info("Uploading...").WithProgress(0.5, show: true);
+        await ToastService.ShowToast(toast);
+    }
+
+    private string _groupingCodeStyle = "Fluent";
+    private string _groupingCodeSnippet = "";
+    private void ToggleGroupingCodeStyle() { _groupingCodeStyle = _groupingCodeStyle == "Fluent" ? "Builder" : "Fluent"; GenerateGroupingCodeSnippet(); }
+    private async Task ShowGroupingExample()
+    {
+        await ToastService.ShowToast(Toast.Info("Low priority").WithPriority(1).InGroup("g1"));
+        await ToastService.ShowToast(Toast.Warning("High priority").WithPriority(10).InGroup("g1", replaceGroup: true));
+    }
+
+    private string _accessibilityCodeStyle = "Fluent";
+    private string _accessibilityCodeSnippet = "";
+    private void ToggleAccessibilityCodeStyle() { _accessibilityCodeStyle = _accessibilityCodeStyle == "Fluent" ? "Builder" : "Fluent"; GenerateAccessibilityCodeSnippet(); }
+    private async Task ShowAccessibilityExample()
+    {
+        await ToastService.ShowToast(Toast.Error("Error occurred").WithAccessibility("Error", "Check details", isImportant: true));
+    }
+
+    private string _soundDelayCodeStyle = "Fluent";
+    private string _soundDelayCodeSnippet = "";
+    private void ToggleSoundDelayCodeStyle() { _soundDelayCodeStyle = _soundDelayCodeStyle == "Fluent" ? "Builder" : "Fluent"; GenerateSoundDelayCodeSnippet(); }
+    private async Task ShowSoundDelayExample()
+    {
+        await ToastService.ShowToast(Toast.Success("Delayed with sound").WithSound("/sounds/success.mp3").WithDelay(2000));
+    }
+
+    private string _persistentCodeStyle = "Fluent";
+    private string _persistentCodeSnippet = "";
+    private string _loadingCodeSnippet = "";
+    private void TogglePersistentCodeStyle() { _persistentCodeStyle = _persistentCodeStyle == "Fluent" ? "Builder" : "Fluent"; GeneratePersistentCodeSnippet(); }
+    private async Task ShowPersistentExample() { await ToastService.ShowToast(Toast.Info("Persistent toast").Persistent()); }
+    private async Task ShowLoadingExample()
+    {
+        var toast = await ToastService.ShowLoading("Processing...");
+        await Task.Delay(2000);
+        await toast.Success("Complete!");
+    }
+
+    private string _batchCodeStyle = "Fluent";
+    private string _batchCodeSnippet = "";
+    private string _promiseCodeSnippet = "";
+    private void ToggleBatchCodeStyle() { _batchCodeStyle = _batchCodeStyle == "Fluent" ? "Builder" : "Fluent"; GenerateBatchCodeSnippet(); }
+    private async Task ShowBatchExample() { await ToastService.ShowBatch(Toast.Success("Toast 1"), Toast.Error("Toast 2"), Toast.Warning("Toast 3")); }
+    private async Task ShowPromiseSuccessExample() { var apiCall = Task.Delay(2000); await ToastService.ShowPromiseToast(apiCall, () => "Saving...", () => "Saved!", ex => $"Failed: {ex.Message}"); }
+    private async Task ShowPromiseErrorExample() { var apiCall = Task.Delay(2000).ContinueWith(t => throw new Exception("Error")); await ToastService.ShowPromiseToast(apiCall, () => "Saving...", () => "Saved!", ex => $"Failed: {ex.Message}"); }
+
+    private string _hiddenToastsCodeSnippet = "";
+    private async Task ShowHiddenToastsExample() { for (int i = 0; i < 5; i++) { await ToastService.ShowToast(Toast.Info($"Toast {i + 1}")); } }
+
+    private string _mouseInteractionsCodeStyle = "Fluent";
+    private string _mouseInteractionsCodeSnippet = "";
+    private void ToggleMouseInteractionsCodeStyle() { _mouseInteractionsCodeStyle = _mouseInteractionsCodeStyle == "Fluent" ? "Builder" : "Fluent"; GenerateMouseInteractionsCodeSnippet(); }
+    private async Task ShowMouseInteractionsExample() { await ToastService.ShowToast(Toast.Info("Interact with me!").WithCallback(onClick: () => ToastService.ShowInfo("Clicked!"))); }
+
+    private string _customIconsCodeStyle = "Fluent";
+    private string _customIconsCodeSnippet = "";
+    private void ToggleCustomIconsCodeStyle() { _customIconsCodeStyle = _customIconsCodeStyle == "Fluent" ? "Builder" : "Fluent"; GenerateCustomIconsCodeSnippet(); }
+    private async Task ShowCustomIconsExample()
+    {
+        RenderFragment icon = @<span style="color: green;">✓</span>;
+        await ToastService.ShowToast(Toast.Success("Custom icon").WithCustomIcon(icon));
+    }
+    #endregion
+
+    #region Code Generation Methods
+    // --- Code Generation Methods ---
+    private void GenerateTypeCodeSnippets()
+    {
+        foreach (var type in Enum.GetValues<ToastType>())
+        {
+            _typeCodeSnippets[type] = _typeCodeStyle == "Fluent"
+                ? type switch
+                {
+                    ToastType.Success => "await ToastService.ShowSuccess(\"Success toast.\");",
+                    ToastType.Error => "await ToastService.ShowError(\"Error toast.\");",
+                    ToastType.Warning => "await ToastService.ShowWarning(\"Warning toast.\");",
+                    ToastType.Info => "await ToastService.ShowInfo(\"Info toast.\");",
+                    ToastType.Loading => "var toast = await ToastService.ShowLoading(\"Loading...\");",
+                    ToastType.Custom => "await ToastService.ShowCustom(builder => { /* ... */ });",
+                    _ => ""
+                }
+                : type switch
+                {
+                    ToastType.Success => "await ToastService.ShowToast(\n  Toast.Builder().Success().Message(\"Success toast.\").Build()\n);",
+                    ToastType.Error => "await ToastService.ShowToast(\n  Toast.Builder().Error().Message(\"Error toast.\").Build()\n);",
+                    ToastType.Warning => "await ToastService.ShowToast(\n  Toast.Builder().Warning().Message(\"Warning toast.\").Build()\n);",
+                    ToastType.Info => "await ToastService.ShowToast(\n  Toast.Builder().Info().Message(\"Info toast.\").Build()\n);",
+                    ToastType.Loading => "var toast = await ToastService.ShowLoading(\"Loading...\");",
+                    ToastType.Custom => "await ToastService.ShowCustom(builder => { /* ... */ });",
+                    _ => ""
+                };
+        }
+    }
+
+    private void GeneratePositionCodeSnippets()
+    {
+        foreach (var pos in Enum.GetValues<ToastPosition>())
+        {
+            _positionCodeSnippets[pos] = _positionCodeStyle == "Fluent"
+                ? $"await ToastService.ShowToast(\n  Toast.Info(\"Toast at {pos}\").WithPosition(ToastPosition.{pos})\n);"
+                : $"await ToastService.ShowToast(\n  Toast.Builder().Info().Message(\"Toast at {pos}\").Position(ToastPosition.{pos}).Build()\n);";
+        }
+    }
+
+    private void GenerateThemeCodeSnippets()
+    {
+        foreach (var theme in Enum.GetValues<ToastTheme>())
+        {
+            _themeCodeSnippets[theme] = _themeCodeStyle == "Fluent"
+                ? $"await ToastService.ShowToast(\n  Toast.Success(\"Theme: {theme}\").WithTheme(ToastTheme.{theme})\n);"
+                : $"await ToastService.ShowToast(\n  Toast.Builder().Success().Message(\"Theme: {theme}\").Theme(ToastTheme.{theme}).Build()\n);";
+        }
+    }
+
+    private void GenerateAnimationCodeSnippets()
+    {
+        foreach (var anim in _animations)
+        {
+            _animationCodeSnippets[anim.Item1] = _animationCodeStyle == "Fluent"
+                ? $"await ToastService.ShowToast(\n  Toast.Info(\"Animation: {anim.Item1}\").WithAnimation(ToastAnimation.{anim.Item1})\n);"
+                : $"await ToastService.ShowToast(\n  Toast.Builder().Info().Message(\"Animation: {anim.Item1}\").WithAnimation(ToastAnimation.{anim.Item1}).Build()\n);";
+        }
+    }
+
+    private void GenerateCustomContentCodeSnippet()
+    {
+        _customContentCodeSnippet = "RenderFragment content = @<div><strong>Custom</strong> <em>content</em></div>;\n" +
+            (_customContentCodeStyle == "Fluent"
+                ? "await ToastService.ShowCustom(content);"
+                : "await ToastService.ShowToast(Toast.Custom(content));"
+            );
+    }
+
+    private void GenerateActionsCodeSnippet()
+    {
+        _actionsCodeSnippet = _actionsCodeStyle == "Fluent"
+            ? "await ToastService.ShowToast(\n  Toast.Warning(\"Session expiring!\").Persistent()\n    .WithAction(\"Stay\", async () => await ToastService.ShowSuccess(\"Extended!\"), true)\n    .WithAction(\"Log Out\", () => Task.CompletedTask)\n);"
+            : "await ToastService.ShowToast(\n  Toast.Builder().Warning().Message(\"Session expiring!\").Persistent()\n    .Action(\"Stay\", async () => await ToastService.ShowSuccess(\"Extended!\"), true)\n    .Action(\"Log Out\", () => Task.CompletedTask).Build()\n);";
+    }
+
+    private void GenerateProgressCodeSnippet()
+    {
+        _progressCodeSnippet = _progressCodeStyle == "Fluent"
+            ? "await ToastService.ShowToast(\n  Toast.Info(\"Uploading...\").WithProgress(0.5, show: true)\n);"
+            : "await ToastService.ShowToast(\n  Toast.Builder().Info().Message(\"Uploading...\").Progress(0.5, true).Build()\n);";
+    }
+
+    private void GenerateGroupingCodeSnippet()
+    {
+        _groupingCodeSnippet = _groupingCodeStyle == "Fluent"
+            ? "await ToastService.ShowToast(Toast.Info(\"Low priority\").WithPriority(1).InGroup(\"g1\"));\nawait ToastService.ShowToast(Toast.Warning(\"High priority\").WithPriority(10).InGroup(\"g1\", replaceGroup: true));"
+            : "await ToastService.ShowToast(Toast.Builder().Info().Message(\"Low priority\").Priority(1).InGroup(\"g1\").Build());\nawait ToastService.ShowToast(Toast.Builder().Warning().Message(\"High priority\").Priority(10).InGroup(\"g1\", true).Build());";
+    }
+
+    private void GenerateAccessibilityCodeSnippet()
+    {
+        _accessibilityCodeSnippet = _accessibilityCodeStyle == "Fluent"
+            ? "await ToastService.ShowToast(\n  Toast.Error(\"Error occurred\").WithAccessibility(\"Error\", \"Check details\", true)\n);"
+            : "await ToastService.ShowToast(\n  Toast.Builder().Error().Message(\"Error occurred\").Accessibility(\"Error\", \"Check details\", true).Build()\n);";
+    }
+
+    private void GenerateSoundDelayCodeSnippet()
+    {
+        _soundDelayCodeSnippet = _soundDelayCodeStyle == "Fluent"
+            ? "await ToastService.ShowToast(\n  Toast.Success(\"Delayed with sound\")\n    .WithSound(\"/sounds/success.mp3\").WithDelay(2000)\n);"
+            : "await ToastService.ShowToast(\n  Toast.Builder().Success().Message(\"Delayed with sound\")\n    .WithSound(\"/sounds/success.mp3\").WithDelay(2000).Build()\n);";
+    }
+
+    private void GeneratePersistentCodeSnippet()
+    {
+        _persistentCodeSnippet = _persistentCodeStyle == "Fluent"
+           ? "await ToastService.ShowToast(Toast.Info(\"Persistent toast\").Persistent());"
+           : "await ToastService.ShowToast(Toast.Builder().Info().Message(\"Persistent toast\").Persistent().Build());";
+    }
+
+    private void GenerateBatchCodeSnippet()
+    {
+        _batchCodeSnippet = _batchCodeStyle == "Fluent"
+            ? "await ToastService.ShowBatch(\n  Toast.Success(\"Toast 1\"),\n  Toast.Error(\"Toast 2\"),\n  Toast.Warning(\"Toast 3\")\n);"
+            : "await ToastService.ShowBatch(\n  Toast.Builder().Success().Message(\"Toast 1\").Build(),\n  Toast.Builder().Error().Message(\"Toast 2\").Build(),\n  Toast.Builder().Warning().Message(\"Toast 3\").Build()\n);";
+    }
+
+    private void GenerateMouseInteractionsCodeSnippet()
+    {
+        _mouseInteractionsCodeSnippet = _mouseInteractionsCodeStyle == "Fluent"
+            ? "await ToastService.ShowToast(\n  Toast.Info(\"Interact with me!\").WithCallback(onClick: () => ToastService.ShowInfo(\"Clicked!\"))\n);"
+            : "await ToastService.ShowToast(\n  Toast.Builder().Info().Message(\"Interact with me!\").OnClick(() => ToastService.ShowInfo(\"Clicked!\")).Build()\n);";
+    }
+
+    private void GenerateCustomIconsCodeSnippet()
+    {
+        _customIconsCodeSnippet = "RenderFragment icon = @<span style=\"color: green;\">✓</span>;\n" +
+            (_customIconsCodeStyle == "Fluent"
+                ? "await ToastService.ShowToast(Toast.Success(\"Custom icon\").WithCustomIcon(icon));"
+                : "await ToastService.ShowToast(Toast.Builder().Success().Message(\"Custom icon\").CustomIcon(icon).Build());"
+            );
+    }
+    #endregion
+
+    protected override void OnInitialized()
+    {
+        // Initialize animations list
+        _animations = new List<(string, ToastAnimation)>
+        {
+            ("Fade", ToastAnimation.Fade), ("Slide", ToastAnimation.Slide), ("Bounce", ToastAnimation.Bounce),
+            ("Scale", ToastAnimation.Scale), ("Flip", ToastAnimation.Flip), ("Zoom", ToastAnimation.Zoom),
+            ("Shake", ToastAnimation.Shake), ("Elastic", ToastAnimation.Elastic)
+        };
+        _selectedAnimation = _animations.First();
+
+        // Call all generation methods to set the initial state
+        GenerateTypeCodeSnippets();
+        GeneratePositionCodeSnippets();
+        GenerateThemeCodeSnippets();
+        GenerateAnimationCodeSnippets();
+        GenerateCustomContentCodeSnippet();
+        GenerateActionsCodeSnippet();
+        GenerateProgressCodeSnippet();
+        GenerateGroupingCodeSnippet();
+        GenerateAccessibilityCodeSnippet();
+        GenerateSoundDelayCodeSnippet();
+        GeneratePersistentCodeSnippet();
+        _loadingCodeSnippet = "var toast = await ToastService.ShowLoading(\"Processing...\");";
+        GenerateBatchCodeSnippet();
+        _promiseCodeSnippet = "var apiCall = Task.Delay(2000);\nawait ToastService.ShowPromiseToast(apiCall, () => \"Saving...\", () => \"Saved!\", ex => $\"Failed: {ex.Message}\");";
+        _hiddenToastsCodeSnippet = "for (int i = 0; i < 5; i++) { await ToastService.ShowToast(Toast.Info($\"Toast {i + 1}\")); }";
+        GenerateMouseInteractionsCodeSnippet();
+        GenerateCustomIconsCodeSnippet();
+    }
+}
