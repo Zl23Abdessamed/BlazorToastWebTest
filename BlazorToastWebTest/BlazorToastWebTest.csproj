@@ -1,23 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
 
-  <ItemGroup>
-    <Content Remove="wwwroot\favicon.png" />
-  </ItemGroup>
+		<!-- GitHub Pages-specific configuration -->
+		<StaticWebAssetBasePath>BlazorToastWebTest</StaticWebAssetBasePath>
+		<PublishTrimmed>false</PublishTrimmed>
+		<PublishReadyToRun>false</PublishReadyToRun>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\favicon.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Remove="wwwroot\favicon.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="BlazorToast" Version="1.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.6" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.6" PrivateAssets="all" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="wwwroot\favicon.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BlazorToast" Version="1.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.6" PrivateAssets="all" />
+	</ItemGroup>
 
 </Project>
