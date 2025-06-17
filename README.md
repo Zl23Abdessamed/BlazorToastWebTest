@@ -16,9 +16,9 @@ A visually engaging static website built with Blazor WebAssembly that demonstrat
 
 ## 🚀 Live Demo
 
-* **Showcase Site**: [https://yourdomain.com](https://yourdomain.com)
-* **Library Repository**: [github.com/your-org/BlazorToast](https://github.com/your-org/BlazorToast)
-* **Community Chat**: [Discord](https://discord.gg/your-invite-link)
+* **Showcase Site**: [BlazorToastShowcase](https://zl23abdessamed.github.io/BlazorToastWebTest/)
+* **Library Repository**: [BlazorToast](https://github.com/Zl23Abdessamed/BlazorToast)
+* **Community Chat**: [Discord](https://discord.gg/84X9nm3fKn)
 
 ---
 
