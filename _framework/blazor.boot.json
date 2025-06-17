@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "BlazorToastWebTest",
   "resources": {
-    "hash": "sha256-unQZAdtiM8z21Zdr9noUt9JxGMn0rwhWdyaaj70PqlI=",
+    "hash": "sha256-+tjxbqH3xilmXZHDq6eHs08RMJh3UBiFZ14BHVMovzg=",
     "fingerprinting": {
       "BlazorToast.t0jqh0y0v5.wasm": "BlazorToast.wasm",
       "Microsoft.AspNetCore.Authorization.phaa9r44xv.wasm": "Microsoft.AspNetCore.Authorization.wasm",
@@ -195,7 +195,7 @@
       "mscorlib.brg9pkj3je.wasm": "mscorlib.wasm",
       "netstandard.wuzd3f1y6v.wasm": "netstandard.wasm",
       "System.Private.CoreLib.05ksnw82w3.wasm": "System.Private.CoreLib.wasm",
-      "BlazorToastWebTest.5ce54zmczh.wasm": "BlazorToastWebTest.wasm",
+      "BlazorToastWebTest.ad06sp3tui.wasm": "BlazorToastWebTest.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.rtblh4npr3.js": "dotnet.native.js",
       "dotnet.native.aqhezbunpl.wasm": "dotnet.native.wasm",
@@ -413,7 +413,7 @@
       "WindowsBase.u25hol0de4.wasm": "sha256-CgB28KCiYKHd4yK6IM0PJ526P7IbRCpNkGTqn+cLwxs=",
       "mscorlib.brg9pkj3je.wasm": "sha256-FzZwzxUYYyg3qxc7Km8r50UKAmRWrIeckSFG1NTHKNU=",
       "netstandard.wuzd3f1y6v.wasm": "sha256-yAXc0deBIRkWTVXqADZfhgZtrxGgJCIbZYVtA0NjvdM=",
-      "BlazorToastWebTest.5ce54zmczh.wasm": "sha256-K9hDecuWOKnGk2mVfFt9k04nYD0Iyu6VOZFPLWYWKK8="
+      "BlazorToastWebTest.ad06sp3tui.wasm": "sha256-Xle8qf5YsVdLAMnM60PfJuropBNSmjd1E8giANJ8zmM="
     }
   },
   "debugLevel": 0,
