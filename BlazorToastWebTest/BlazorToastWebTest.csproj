@@ -6,10 +6,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 
 		<!-- GitHub Pages-specific configuration -->
-		<StaticWebAssetBasePath>BlazorToastWebTest</StaticWebAssetBasePath>
 		<PublishTrimmed>false</PublishTrimmed>
 		<PublishReadyToRun>false</PublishReadyToRun>
-		<BasePath>/BlazorToastWebTest/</BasePath>
 		<BlazorCacheBootResources>false</BlazorCacheBootResources>
 	</PropertyGroup>
 
